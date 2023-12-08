@@ -25,10 +25,6 @@
     @else    
         <h2>There are no guitars to display</h2>
     @endif
-    <div>
-        User input: {{ $userInput }}
-    </div>
-
 </div>
 
 @stop

@@ -4,17 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Guitar;
+use App\Http\Requests\GuitarFormRequest;
 
 class GuitarsController extends Controller
 
 {
     private static function getData() {
-        return [
-            ['id' => 1,'name'=> 'American standart Strat', 'brand'=> 'Fender'],
-            ['id' => 2,'name'=> 'Starla S2', 'brand'=> 'RPS'],
-            ['id' => 3,'name'=> 'Explorer', 'brand'=> 'Gibson'],
-            ['id' => 4,'name'=> 'Talman', 'brand'=> 'Ibanez']
-        ];
+        return Guitar::all();
     }
 
     /**
@@ -26,8 +22,7 @@ class GuitarsController extends Controller
         // displaying all the guitars in the DB 
 
         return view('guitars.index', [
-            'guitars' => Guitar::all(),
-            'userInput' => '<script>alert("hello")</script>'
+            'guitars' => Guitar::all()
         ]);
     }
 
@@ -42,58 +37,44 @@ class GuitarsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(GuitarFormRequest $request)
     {
-        request()->validate([
-            'guitar-name'=> 'required',
-            'brand'=> 'required',
-            'year'=> ['required', 'integer']
-        ]);
-
-        $guitar = new Guitar();
-
-        $guitar->name = $request->input('guitar-name');
-        $guitar->brand = $request->input('brand');
-        $guitar->year_made = $request->input('year');
-
-        $guitar->save();
-
+        $data = $request->validated();
+        Guitar::create($data);
         return redirect()->route('guitars.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Guitar $guitar)
     {
         // GET a single record
-        $guitars = self::getData();
-        
-        $index = array_search($id, array_column($guitars,'id'));
-
-        if ($index === false) {
-            abort(404);
-        } 
-        
         return view('guitars.show', [
-            'guitar'=> $guitars[$index]
+            'guitar'=> $guitar
             ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Guitar $guitar)
     {
         // GET
+        return view('guitars.edit', [
+            'guitar'=> $guitar
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(GuitarFormRequest $request, Guitar $guitar)
     {
         // POST
+        $data = $request->validated();
+        $guitar->update($data);
+        return redirect()->route('guitars.show', $guitar->id);
     }
 
     /**
