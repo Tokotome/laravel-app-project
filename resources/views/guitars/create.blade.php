@@ -7,15 +7,24 @@
         @csrf
         <div class="form-group">
             <label class="text-sm" for="guitar-name">Guitar name</label>
-            <input class="text-lg border-1" type="text" id="guitar-name" name="guitar-name">
+            <input class="text-lg border-1" type="text" id="guitar-name" value="{{old('guitar-name')}}" name="guitar-name">
+            @error('guitar-name')
+                <div class="form-error">{{$message}}</div>
+            @enderror
         </div>
         <div>
             <label class="text-sm" for="brand">Brand</label><br>
-            <input class="text-lg border-1" type="text" id="brand" name="brand">
+            <input class="text-lg border-1" type="text" id="brand" name="brand" value="{{old('brand')}}">
+            @error('brand')
+                <div class="form-error">{{$message}}</div>
+            @enderror
         </div>
         <div>
             <label class="text-sm" for="year">Year made</label><br>
-            <input class="text-lg border-1" type="text" id="year" name="year">
+            <input class="text-lg border-1" type="text" id="year" name="year" value="{{old('year')}}">
+            @error('year')
+                <div class="form-error">{{$message}}</div>
+            @enderror
         </div>
         <br>
         <div>
